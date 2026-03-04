@@ -1,0 +1,127 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String       @id @default(cuid())
+  username  String       @unique
+  name      String
+  email     String?
+  password  String
+  phone     String?
+  role      Role         @default(PLAYER)
+  level     PlayerLevel?
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  bookings  Booking[]
+  adminCourts CourtAdmin[]
+  blockedSlots BlockedSlot[]
+}
+
+model Court {
+  id           String       @id @default(cuid())
+  name         String
+  type         CourtType
+  surface      SurfaceType
+  pricePerHour Float        @default(60)
+  openTime     String       @default("08:00")
+  closeTime    String       @default("22:00")
+  isActive     Boolean      @default(true)
+  image        String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  bookings     Booking[]
+  admins       CourtAdmin[]
+  blockedSlots BlockedSlot[]
+  slots        CourtSlot[]
+}
+
+model CourtAdmin {
+  id      String @id @default(cuid())
+  userId  String
+  courtId String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  court   Court  @relation(fields: [courtId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courtId])
+}
+
+model Booking {
+  id         String        @id @default(cuid())
+  userId     String
+  courtId    String
+  date       String
+  startTime  String
+  endTime    String
+  status     BookingStatus @default(CONFIRMED)
+  totalPrice Float
+  notes      String?
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+  court      Court         @relation(fields: [courtId], references: [id], onDelete: Cascade)
+  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([courtId, date, startTime, endTime])
+}
+
+model CourtSlot {
+  id        String @id @default(cuid())
+  courtId   String
+  dayOfWeek Int    // 0=Domingo, 6=Sábado
+  startTime String // "08:00"
+  endTime   String // "09:30"
+  court     Court  @relation(fields: [courtId], references: [id], onDelete: Cascade)
+
+  @@index([courtId, dayOfWeek])
+}
+
+model BlockedSlot {
+  id        String   @id @default(cuid())
+  courtId   String
+  date      String
+  startTime String
+  endTime   String
+  reason    String?
+  blockedBy String
+  createdAt DateTime @default(now())
+  court     Court    @relation(fields: [courtId], references: [id], onDelete: Cascade)
+  admin     User     @relation(fields: [blockedBy], references: [id], onDelete: Cascade)
+
+  @@index([courtId, date])
+}
+
+enum Role {
+  ADMIN
+  COURT_ADMIN
+  PLAYER
+}
+
+enum PlayerLevel {
+  A
+  B
+  C
+}
+
+enum CourtType {
+  INDOOR
+  OUTDOOR
+}
+
+enum SurfaceType {
+  CLAY
+  HARD
+  GRASS
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
