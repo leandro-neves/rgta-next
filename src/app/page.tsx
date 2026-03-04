@@ -1304,11 +1304,10 @@ export default function Home() {
                 {/* Admin Dashboard */}
                 <TabsContent value="dashboard" className="space-y-6">
                   {adminStats ? (<>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+                    <div className="grid grid-cols-3 gap-3 md:gap-4">
                       {[
                         { icon: Users, value: adminStats.users.total, label: 'Usuarios', color: 'blue' },
                         { icon: CalendarDays, value: adminStats.bookings.total, label: 'Reservas', color: 'emerald' },
-                        { icon: DollarSign, value: formatCurrency(adminStats.revenue.total), label: 'Receita Total', color: 'purple' },
                         { icon: TrendingUp, value: formatCurrency(adminStats.revenue.monthly), label: 'Este Mes', color: 'orange' },
                       ].map(card => {
                         const colors: Record<string, string> = { blue: 'from-blue-50 to-blue-100/50 border-blue-200', emerald: 'from-emerald-50 to-emerald-100/50 border-emerald-200', purple: 'from-purple-50 to-purple-100/50 border-purple-200', orange: 'from-orange-50 to-orange-100/50 border-orange-200' }
