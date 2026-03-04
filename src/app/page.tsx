@@ -21,7 +21,7 @@ import {
   CalendarDays, Clock, MapPin, Users, Trophy,
   LogIn, UserPlus, LogOut, CalendarX, CheckCircle, XCircle, AlertCircle, Loader2, Eye,
   Settings, BarChart3, UserCog, Trash2, Edit, Plus, DollarSign, TrendingUp, Shield,
-  ChevronDown, RefreshCw, User2, Lock, Ban
+  ChevronDown, RefreshCw, User2, Lock, Ban, Instagram, ExternalLink
 } from 'lucide-react'
 import { Bar, BarChart, XAxis, YAxis, CartesianGrid, Cell, Pie, PieChart } from 'recharts'
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
@@ -143,6 +143,29 @@ const getCourtTypeLabel = (type: string) => {
 const getSurfaceLabel = (surface: string) => {
   const labels: Record<string, string> = { CLAY: 'Saibro', HARD: 'Rigida', GRASS: 'Grama' }
   return labels[surface] || surface
+}
+
+const courtExtraInfo: Record<string, { address: string; mapsUrl: string; instagram: string }> = {
+  'Tennis Center': {
+    address: 'Av. Brasil, 1130 - Sumaré, Caraguatatuba - SP',
+    mapsUrl: 'https://www.google.com/maps/search/Av.+Brasil,+1130+-+Sumaré,+Caraguatatuba+-+SP,+11661-200',
+    instagram: 'https://instagram.com/tnniscnter',
+  },
+  'Tennis Point': {
+    address: 'R. Caçapava, 574 - Sumaré, Caraguatatuba - SP',
+    mapsUrl: 'https://www.google.com/maps/search/R.+Caçapava,+574+-+Sumaré,+Caraguatatuba+-+SP,+11661-040',
+    instagram: 'https://instagram.com/tenispointcaraguatatuba',
+  },
+  'Top Spin (Quadra 1)': {
+    address: 'Av. Dos Bandeirantes, 240 - Martim de Sá, Caraguatatuba - SP',
+    mapsUrl: 'https://www.google.com/maps/search/Av.+Dos+Bandeirantes,+240+-+Martim+de+Sá,+Caraguatatuba+-+SP,+11662-100',
+    instagram: 'https://instagram.com/arena_topspin',
+  },
+  'Top Spin (Quadra 2)': {
+    address: 'Av. Dos Bandeirantes, 240 - Martim de Sá, Caraguatatuba - SP',
+    mapsUrl: 'https://www.google.com/maps/search/Av.+Dos+Bandeirantes,+240+-+Martim+de+Sá,+Caraguatatuba+-+SP,+11662-100',
+    instagram: 'https://instagram.com/arena_topspin',
+  },
 }
 
 const getLevelBadge = (level: string | null) => {
@@ -868,11 +891,11 @@ export default function Home() {
                       <DialogDescription>Cadastre-se para comecar a reservar</DialogDescription>
                     </DialogHeader>
                     <form onSubmit={handleRegister} className="space-y-4 mt-4">
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div className="space-y-2"><Label>Usuario *</Label><Input value={registerForm.username} onChange={e => setRegisterForm({ ...registerForm, username: e.target.value })} placeholder="seu.usuario" required /></div>
                         <div className="space-y-2"><Label>Nome completo *</Label><Input value={registerForm.name} onChange={e => setRegisterForm({ ...registerForm, name: e.target.value })} placeholder="Seu nome" required /></div>
                       </div>
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div className="space-y-2"><Label>Email</Label><Input type="email" value={registerForm.email} onChange={e => setRegisterForm({ ...registerForm, email: e.target.value })} placeholder="seu@email.com" /></div>
                         <div className="space-y-2"><Label>Telefone</Label><Input value={registerForm.phone} onChange={e => setRegisterForm({ ...registerForm, phone: e.target.value })} placeholder="(11) 99999-9999" /></div>
                       </div>
@@ -907,7 +930,7 @@ export default function Home() {
       </header>
 
       {/* Hero */}
-      <section className="relative py-12 md:py-16 overflow-hidden bg-gradient-to-br from-emerald-600 via-emerald-700 to-green-800">
+      <section className="relative py-8 md:py-16 overflow-hidden bg-gradient-to-br from-emerald-600 via-emerald-700 to-green-800">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-10 left-10 w-32 h-32 rounded-full border-4 border-white/30" />
           <div className="absolute bottom-10 right-20 w-48 h-48 rounded-full border-4 border-white/20" />
@@ -928,21 +951,21 @@ export default function Home() {
               {bookingCountdown && <span className="text-lg font-bold font-mono text-white tracking-wider">{bookingCountdown}</span>}
             </div>
           )}
-          <h1 className="text-3xl md:text-5xl font-bold mb-4 tracking-tight">Reserve sua quadra de tenis</h1>
-          <p className="text-base md:text-lg text-emerald-100 mb-8 max-w-2xl mx-auto">Agende horarios nos fins de semana. Ate 2 jogadores por horario!</p>
+          <h1 className="text-2xl md:text-5xl font-bold mb-3 md:mb-4 tracking-tight">Reserve sua quadra de tenis</h1>
+          <p className="text-sm md:text-lg text-emerald-100 mb-6 md:mb-8 max-w-2xl mx-auto">Agende horarios nos fins de semana. Ate 2 jogadores por horario!</p>
           <Button size="lg" className="bg-white text-emerald-700 hover:bg-emerald-50 shadow-xl shadow-emerald-900/20 font-semibold" onClick={() => setActiveTab('booking')}>
             <CalendarDays className="w-5 h-5 mr-2" />Fazer Reserva
           </Button>
-          <div className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 max-w-2xl mx-auto">
+          <div className="mt-8 md:mt-10 grid grid-cols-4 gap-2 md:gap-8 max-w-2xl mx-auto">
             {[
               { val: `${courts.length || 4}`, label: 'Quadras' },
               { val: 'R$ 60,00', label: '' },
               { val: 'Sab/Dom', label: 'Disponivel' },
               { val: '2 vagas', label: 'Por horario' },
             ].map(item => (
-              <div key={item.val} className="bg-white/10 backdrop-blur-sm rounded-xl p-3 flex flex-col items-center justify-center">
-                <p className="text-2xl md:text-3xl font-bold">{item.val}</p>
-                {item.label && <p className="text-emerald-200 text-xs mt-0.5">{item.label}</p>}
+              <div key={item.val} className="bg-white/10 backdrop-blur-sm rounded-xl p-2 md:p-3 flex flex-col items-center justify-center">
+                <p className="text-sm md:text-3xl font-bold">{item.val}</p>
+                {item.label && <p className="text-emerald-200 text-[10px] md:text-xs mt-0.5">{item.label}</p>}
               </div>
             ))}
           </div>
@@ -953,12 +976,12 @@ export default function Home() {
       <section className="max-w-7xl mx-auto px-4 py-8 md:py-12">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <div className="overflow-x-auto -mx-4 px-4">
-            <TabsList className={`inline-flex w-auto min-w-full md:grid md:mx-auto ${isAdminRole ? 'md:max-w-3xl md:grid-cols-5' : 'md:max-w-2xl md:grid-cols-4'} h-auto p-1`}>
-              <TabsTrigger value="public" className="text-xs md:text-sm whitespace-nowrap px-3 py-2"><Eye className="w-4 h-4 mr-1.5 shrink-0" /><span className="hidden sm:inline">Reservas do Dia</span><span className="sm:hidden">Dia</span></TabsTrigger>
-              <TabsTrigger value="booking" className="text-xs md:text-sm whitespace-nowrap px-3 py-2"><CalendarDays className="w-4 h-4 mr-1.5 shrink-0" />Reservar</TabsTrigger>
-              <TabsTrigger value="courts" className="text-xs md:text-sm whitespace-nowrap px-3 py-2"><MapPin className="w-4 h-4 mr-1.5 shrink-0" />Quadras</TabsTrigger>
-              {(!user || user.role === 'PLAYER') && <TabsTrigger value="bookings" className="text-xs md:text-sm whitespace-nowrap px-3 py-2"><Users className="w-4 h-4 mr-1.5 shrink-0" /><span className="hidden sm:inline">Minhas Reservas</span><span className="sm:hidden">Minhas</span></TabsTrigger>}
-              {isAdminRole && <TabsTrigger value="admin" className="text-xs md:text-sm whitespace-nowrap px-3 py-2 data-[state=active]:bg-purple-100 data-[state=active]:text-purple-700"><Settings className="w-4 h-4 mr-1.5 shrink-0" />Admin</TabsTrigger>}
+            <TabsList className={`inline-flex w-full md:grid md:mx-auto ${isAdminRole ? 'md:max-w-3xl md:grid-cols-5' : 'md:max-w-2xl md:grid-cols-4'} h-auto p-1`}>
+              <TabsTrigger value="public" className="flex-1 text-xs md:text-sm whitespace-nowrap px-2 md:px-3 py-2"><Eye className="w-4 h-4 mr-1 md:mr-1.5 shrink-0" /><span className="hidden sm:inline">Reservas do Dia</span><span className="sm:hidden">Dia</span></TabsTrigger>
+              <TabsTrigger value="booking" className="flex-1 text-xs md:text-sm whitespace-nowrap px-2 md:px-3 py-2"><CalendarDays className="w-4 h-4 mr-1 md:mr-1.5 shrink-0" />Reservar</TabsTrigger>
+              <TabsTrigger value="courts" className="flex-1 text-xs md:text-sm whitespace-nowrap px-2 md:px-3 py-2"><MapPin className="w-4 h-4 mr-1 md:mr-1.5 shrink-0" />Quadras</TabsTrigger>
+              {(!user || user.role === 'PLAYER') && <TabsTrigger value="bookings" className="flex-1 text-xs md:text-sm whitespace-nowrap px-2 md:px-3 py-2"><Users className="w-4 h-4 mr-1 md:mr-1.5 shrink-0" /><span className="hidden sm:inline">Minhas Reservas</span><span className="sm:hidden">Minhas</span></TabsTrigger>}
+              {isAdminRole && <TabsTrigger value="admin" className="flex-1 text-xs md:text-sm whitespace-nowrap px-2 md:px-3 py-2 data-[state=active]:bg-purple-100 data-[state=active]:text-purple-700"><Settings className="w-4 h-4 mr-1 md:mr-1.5 shrink-0" />Admin</TabsTrigger>}
             </TabsList>
           </div>
 
@@ -1226,8 +1249,20 @@ export default function Home() {
                     </div>
                     <CardHeader className="pb-2"><CardTitle className="text-base">{court.name}</CardTitle><CardDescription>{getCourtTypeLabel(court.type)} - {getSurfaceLabel(court.surface)}</CardDescription></CardHeader>
                     <CardContent>
-                      <div className="flex gap-2"><Badge variant="outline" className="text-xs">{getCourtTypeLabel(court.type)}</Badge><Badge variant="secondary" className="text-xs">{getSurfaceLabel(court.surface)}</Badge></div>
-                      <Button className="w-full mt-3 bg-emerald-600 hover:bg-emerald-700" size="sm" onClick={() => { setSelectedCourt(court); setActiveTab('booking') }}><CalendarDays className="w-4 h-4 mr-1.5" />Reservar</Button>
+                      <div className="flex gap-2 mb-3"><Badge variant="outline" className="text-xs">{getCourtTypeLabel(court.type)}</Badge><Badge variant="secondary" className="text-xs">{getSurfaceLabel(court.surface)}</Badge></div>
+                      {courtExtraInfo[court.name] && (
+                        <div className="space-y-1.5 mb-3 text-xs">
+                          <a href={courtExtraInfo[court.name].mapsUrl} target="_blank" rel="noopener noreferrer" className="flex items-start gap-1.5 text-gray-500 hover:text-emerald-600 transition-colors">
+                            <MapPin className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                            <span className="leading-tight">{courtExtraInfo[court.name].address}</span>
+                          </a>
+                          <a href={courtExtraInfo[court.name].instagram} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-gray-500 hover:text-pink-600 transition-colors">
+                            <Instagram className="w-3.5 h-3.5 shrink-0" />
+                            <span>{courtExtraInfo[court.name].instagram.replace('https://instagram.com/', '@')}</span>
+                          </a>
+                        </div>
+                      )}
+                      <Button className="w-full bg-emerald-600 hover:bg-emerald-700" size="sm" onClick={() => { setSelectedCourt(court); setActiveTab('booking') }}><CalendarDays className="w-4 h-4 mr-1.5" />Reservar</Button>
                     </CardContent>
                   </Card>
                 ))}
@@ -1292,12 +1327,12 @@ export default function Home() {
               </Card>
               <Tabs value={adminActiveTab} onValueChange={setAdminActiveTab}>
                 <div className="overflow-x-auto -mx-4 px-4">
-                  <TabsList className="inline-flex w-auto min-w-full md:grid md:grid-cols-5 md:w-full md:max-w-2xl md:mx-auto h-auto p-1">
-                    <TabsTrigger value="dashboard" className="text-xs md:text-sm whitespace-nowrap px-3 py-2"><BarChart3 className="w-4 h-4 mr-1" />Dashboard</TabsTrigger>
-                    <TabsTrigger value="users" className="text-xs md:text-sm whitespace-nowrap px-3 py-2"><UserCog className="w-4 h-4 mr-1" />Usuarios</TabsTrigger>
-                    <TabsTrigger value="bookings" className="text-xs md:text-sm whitespace-nowrap px-3 py-2"><CalendarDays className="w-4 h-4 mr-1" />Reservas</TabsTrigger>
-                    <TabsTrigger value="courts" className="text-xs md:text-sm whitespace-nowrap px-3 py-2"><MapPin className="w-4 h-4 mr-1" />Quadras</TabsTrigger>
-                    <TabsTrigger value="blocks" className="text-xs md:text-sm whitespace-nowrap px-3 py-2"><Ban className="w-4 h-4 mr-1" />Bloqueios</TabsTrigger>
+                  <TabsList className="inline-flex w-full md:grid md:grid-cols-5 md:w-full md:max-w-2xl md:mx-auto h-auto p-1">
+                    <TabsTrigger value="dashboard" className="flex-1 text-xs md:text-sm whitespace-nowrap px-2 md:px-3 py-2"><BarChart3 className="w-3.5 h-3.5 md:w-4 md:h-4 mr-1" /><span className="hidden sm:inline">Dashboard</span><span className="sm:hidden">Dash</span></TabsTrigger>
+                    <TabsTrigger value="users" className="flex-1 text-xs md:text-sm whitespace-nowrap px-2 md:px-3 py-2"><UserCog className="w-3.5 h-3.5 md:w-4 md:h-4 mr-1" />Usuarios</TabsTrigger>
+                    <TabsTrigger value="bookings" className="flex-1 text-xs md:text-sm whitespace-nowrap px-2 md:px-3 py-2"><CalendarDays className="w-3.5 h-3.5 md:w-4 md:h-4 mr-1" />Reservas</TabsTrigger>
+                    <TabsTrigger value="courts" className="flex-1 text-xs md:text-sm whitespace-nowrap px-2 md:px-3 py-2"><MapPin className="w-3.5 h-3.5 md:w-4 md:h-4 mr-1" />Quadras</TabsTrigger>
+                    <TabsTrigger value="blocks" className="flex-1 text-xs md:text-sm whitespace-nowrap px-2 md:px-3 py-2"><Ban className="w-3.5 h-3.5 md:w-4 md:h-4 mr-1" />Bloqueios</TabsTrigger>
                   </TabsList>
                 </div>
 
