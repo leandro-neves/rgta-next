@@ -1055,37 +1055,35 @@ export default function Home() {
                               const playerA = slotBookings[0]
                               const playerB = slotBookings[1]
                               return (
-                              <div key={slotTime} className="p-4 hover:bg-gray-50/50 transition-colors">
-                                <div className="flex items-center justify-between">
-                                  <div className="flex items-center gap-3 md:gap-4 flex-1 min-w-0">
-                                    <div className="flex items-center gap-1.5 text-emerald-700 font-mono font-semibold bg-emerald-50 px-2.5 py-1.5 rounded-lg text-sm shrink-0">
-                                      <Clock className="w-3.5 h-3.5" />{startTime}-{endTime}
-                                    </div>
-                                    <div className="flex items-center gap-2 min-w-0">
-                                      <div className="flex items-center gap-1.5">
-                                        <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center shrink-0"><span className="text-white text-xs font-bold">{playerA.user.name.charAt(0)}</span></div>
-                                        <div className="min-w-0"><p className="font-medium text-sm truncate">{playerA.user.name}</p>{playerA.user.level && <div className="text-xs">{getLevelBadge(playerA.user.level)}</div>}</div>
-                                      </div>
-                                      {playerB ? (
-                                        <>
-                                          <span className="text-base font-bold text-gray-400 mx-1">x</span>
-                                          <div className="flex items-center gap-1.5">
-                                            <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center shrink-0"><span className="text-white text-xs font-bold">{playerB.user.name.charAt(0)}</span></div>
-                                            <div className="min-w-0"><p className="font-medium text-sm truncate">{playerB.user.name}</p>{playerB.user.level && <div className="text-xs">{getLevelBadge(playerB.user.level)}</div>}</div>
-                                          </div>
-                                        </>
-                                      ) : (
-                                        <Badge variant="outline" className="text-xs text-amber-600 border-amber-300 ml-2">1 vaga</Badge>
-                                      )}
-                                    </div>
+                              <div key={slotTime} className="p-3 sm:p-4 hover:bg-gray-50/50 transition-colors">
+                                <div className="flex items-center justify-between gap-2 mb-2 sm:mb-0">
+                                  <div className="flex items-center gap-1.5 text-emerald-700 font-mono font-semibold bg-emerald-50 px-2 py-1 rounded-lg text-xs sm:text-sm shrink-0">
+                                    <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5" />{startTime}-{endTime}
                                   </div>
-                                  <div className="flex items-center gap-2 shrink-0 ml-2">
+                                  <div className="flex items-center gap-1.5">
                                     {slotBookings.length >= 2
-                                      ? <Badge className="flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700"><CheckCircle className="w-3 h-3" />Confirmado</Badge>
-                                      : <Badge className="flex items-center gap-1 bg-amber-500 hover:bg-amber-600 text-white"><AlertCircle className="w-3 h-3" />Aguardando Adversario</Badge>
+                                      ? <Badge className="flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-[10px] sm:text-xs"><CheckCircle className="w-3 h-3" />Confirmado</Badge>
+                                      : <Badge className="flex items-center gap-1 bg-amber-500 hover:bg-amber-600 text-white text-[10px] sm:text-xs"><AlertCircle className="w-3 h-3" /><span className="hidden sm:inline">Aguardando Adversario</span><span className="sm:hidden">1 vaga</span></Badge>
                                     }
-                                    <span className="text-sm font-bold text-emerald-600 hidden sm:block">{formatCurrency(playerA.totalPrice)}</span>
+                                    <span className="text-xs sm:text-sm font-bold text-emerald-600">{formatCurrency(playerA.totalPrice)}</span>
                                   </div>
+                                </div>
+                                <div className="flex items-center gap-2 mt-2">
+                                  <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-emerald-600 flex items-center justify-center shrink-0"><span className="text-white text-xs font-bold">{playerA.user.name.charAt(0)}</span></div>
+                                    <div className="min-w-0"><p className="font-medium text-xs sm:text-sm truncate">{playerA.user.name}</p>{playerA.user.level && <div className="text-[10px] sm:text-xs">{getLevelBadge(playerA.user.level)}</div>}</div>
+                                  </div>
+                                  {playerB ? (
+                                    <>
+                                      <span className="text-sm font-bold text-gray-400">x</span>
+                                      <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-blue-600 flex items-center justify-center shrink-0"><span className="text-white text-xs font-bold">{playerB.user.name.charAt(0)}</span></div>
+                                        <div className="min-w-0"><p className="font-medium text-xs sm:text-sm truncate">{playerB.user.name}</p>{playerB.user.level && <div className="text-[10px] sm:text-xs">{getLevelBadge(playerB.user.level)}</div>}</div>
+                                      </div>
+                                    </>
+                                  ) : (
+                                    <div className="flex-1 text-center"><span className="text-xs text-gray-400 italic">Aguardando adversario...</span></div>
+                                  )}
                                 </div>
                               </div>
                               )
@@ -1327,19 +1325,19 @@ export default function Home() {
               </Card>
               <Tabs value={adminActiveTab} onValueChange={setAdminActiveTab}>
                 <div className="overflow-x-auto -mx-4 px-4">
-                  <TabsList className="inline-flex w-full md:grid md:grid-cols-5 md:w-full md:max-w-2xl md:mx-auto h-auto p-1">
-                    <TabsTrigger value="dashboard" className="flex-1 text-xs md:text-sm whitespace-nowrap px-2 md:px-3 py-2"><BarChart3 className="w-3.5 h-3.5 md:w-4 md:h-4 mr-1" /><span className="hidden sm:inline">Dashboard</span><span className="sm:hidden">Dash</span></TabsTrigger>
-                    <TabsTrigger value="users" className="flex-1 text-xs md:text-sm whitespace-nowrap px-2 md:px-3 py-2"><UserCog className="w-3.5 h-3.5 md:w-4 md:h-4 mr-1" />Usuarios</TabsTrigger>
-                    <TabsTrigger value="bookings" className="flex-1 text-xs md:text-sm whitespace-nowrap px-2 md:px-3 py-2"><CalendarDays className="w-3.5 h-3.5 md:w-4 md:h-4 mr-1" />Reservas</TabsTrigger>
-                    <TabsTrigger value="courts" className="flex-1 text-xs md:text-sm whitespace-nowrap px-2 md:px-3 py-2"><MapPin className="w-3.5 h-3.5 md:w-4 md:h-4 mr-1" />Quadras</TabsTrigger>
-                    <TabsTrigger value="blocks" className="flex-1 text-xs md:text-sm whitespace-nowrap px-2 md:px-3 py-2"><Ban className="w-3.5 h-3.5 md:w-4 md:h-4 mr-1" />Bloqueios</TabsTrigger>
+                  <TabsList className="grid grid-cols-5 w-full md:max-w-2xl md:mx-auto h-auto p-1">
+                    <TabsTrigger value="dashboard" className="text-[10px] sm:text-sm px-1 sm:px-3 py-2"><BarChart3 className="w-3.5 h-3.5 sm:mr-1 shrink-0" /><span className="hidden sm:inline">Dashboard</span></TabsTrigger>
+                    <TabsTrigger value="users" className="text-[10px] sm:text-sm px-1 sm:px-3 py-2"><UserCog className="w-3.5 h-3.5 sm:mr-1 shrink-0" /><span className="hidden sm:inline">Usuarios</span></TabsTrigger>
+                    <TabsTrigger value="bookings" className="text-[10px] sm:text-sm px-1 sm:px-3 py-2"><CalendarDays className="w-3.5 h-3.5 sm:mr-1 shrink-0" /><span className="hidden sm:inline">Reservas</span></TabsTrigger>
+                    <TabsTrigger value="courts" className="text-[10px] sm:text-sm px-1 sm:px-3 py-2"><MapPin className="w-3.5 h-3.5 sm:mr-1 shrink-0" /><span className="hidden sm:inline">Quadras</span></TabsTrigger>
+                    <TabsTrigger value="blocks" className="text-[10px] sm:text-sm px-1 sm:px-3 py-2"><Ban className="w-3.5 h-3.5 sm:mr-1 shrink-0" /><span className="hidden sm:inline">Bloqueios</span></TabsTrigger>
                   </TabsList>
                 </div>
 
                 {/* Admin Dashboard */}
                 <TabsContent value="dashboard" className="space-y-6">
                   {adminStats ? (<>
-                    <div className="grid grid-cols-3 gap-3 md:gap-4">
+                    <div className="grid grid-cols-3 gap-2 md:gap-4">
                       {[
                         { icon: Users, value: adminStats.users.total, label: 'Usuarios', color: 'blue' },
                         { icon: CalendarDays, value: adminStats.bookings.total, label: 'Reservas', color: 'emerald' },
@@ -1351,9 +1349,9 @@ export default function Home() {
                         const labelColor: Record<string, string> = { blue: 'text-blue-600', emerald: 'text-emerald-600', purple: 'text-purple-600', orange: 'text-orange-600' }
                         return (
                           <Card key={card.label} className={`bg-gradient-to-br ${colors[card.color]}`}>
-                            <CardContent className="p-4"><div className="flex items-center gap-3">
-                              <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-lg ${iconBg[card.color]}`}><card.icon className="w-5 h-5 text-white" /></div>
-                              <div><p className={`text-xl font-bold ${textColor[card.color]}`}>{card.value}</p><p className={`text-xs ${labelColor[card.color]}`}>{card.label}</p></div>
+                            <CardContent className="p-3 sm:p-4"><div className="flex flex-col sm:flex-row items-center gap-1.5 sm:gap-3">
+                              <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shadow-lg ${iconBg[card.color]}`}><card.icon className="w-4 h-4 sm:w-5 sm:h-5 text-white" /></div>
+                              <div className="text-center sm:text-left"><p className={`text-base sm:text-xl font-bold ${textColor[card.color]}`}>{card.value}</p><p className={`text-[10px] sm:text-xs ${labelColor[card.color]}`}>{card.label}</p></div>
                             </div></CardContent>
                           </Card>
                         )
@@ -1418,16 +1416,16 @@ export default function Home() {
                       <DialogTrigger asChild><Button className="bg-emerald-600 hover:bg-emerald-700" size="sm"><Plus className="w-4 h-4 mr-1.5" />Novo Usuario</Button></DialogTrigger>
                       <DialogContent><DialogHeader><DialogTitle>Criar Novo Usuario</DialogTitle><DialogDescription>Crie um jogador, administrador de quadra ou administrador</DialogDescription></DialogHeader>
                         <div className="space-y-4 mt-4">
-                          <div className="grid grid-cols-2 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="space-y-2"><Label>Username *</Label><Input value={newUserForm.username} onChange={e => setNewUserForm({ ...newUserForm, username: e.target.value })} placeholder="joao.silva" /></div>
                             <div className="space-y-2"><Label>Senha *</Label><Input type="password" value={newUserForm.password} onChange={e => setNewUserForm({ ...newUserForm, password: e.target.value })} placeholder="Min. 6 caracteres" /></div>
                           </div>
                           <div className="space-y-2"><Label>Nome Completo *</Label><Input value={newUserForm.name} onChange={e => setNewUserForm({ ...newUserForm, name: e.target.value })} placeholder="João da Silva" /></div>
-                          <div className="grid grid-cols-2 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="space-y-2"><Label>Email</Label><Input value={newUserForm.email} onChange={e => setNewUserForm({ ...newUserForm, email: e.target.value })} placeholder="email@exemplo.com" /></div>
                             <div className="space-y-2"><Label>Telefone</Label><Input value={newUserForm.phone} onChange={e => setNewUserForm({ ...newUserForm, phone: e.target.value })} placeholder="(12) 99999-9999" /></div>
                           </div>
-                          <div className="grid grid-cols-2 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="space-y-2"><Label>Função</Label><Select value={newUserForm.role} onValueChange={v => setNewUserForm({ ...newUserForm, role: v, level: v === 'PLAYER' ? 'C' : '', courtIds: v === 'COURT_ADMIN' ? newUserForm.courtIds : [] })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="PLAYER">Jogador</SelectItem><SelectItem value="COURT_ADMIN">Admin Quadra</SelectItem><SelectItem value="ADMIN">Administrador</SelectItem></SelectContent></Select></div>
                             {newUserForm.role === 'PLAYER' && <div className="space-y-2"><Label>Nivel</Label><Select value={newUserForm.level} onValueChange={v => setNewUserForm({ ...newUserForm, level: v })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="A">A - Avancado</SelectItem><SelectItem value="B">B - Intermediario</SelectItem><SelectItem value="C">C - Iniciante</SelectItem></SelectContent></Select></div>}
                           </div>
@@ -1454,16 +1452,20 @@ export default function Home() {
                   </div>
                   {adminLoading ? <div className="space-y-3">{[1, 2, 3].map(i => <Skeleton key={i} className="h-[80px] rounded-xl" />)}</div> : (
                     <div className="space-y-3">{adminUsers.map(u => (
-                      <Card key={u.id} className="hover:shadow-sm transition-shadow"><CardContent className="p-4"><div className="flex items-center justify-between gap-3">
-                        <div className="flex items-center gap-3 min-w-0">
+                      <Card key={u.id} className="hover:shadow-sm transition-shadow"><CardContent className="p-3 md:p-4">
+                        <div className="flex items-center gap-3">
                           <div className="h-10 w-10 rounded-full bg-emerald-600 flex items-center justify-center shrink-0"><span className="text-white font-bold">{u.name.charAt(0)}</span></div>
-                          <div className="min-w-0"><div className="flex items-center gap-2"><p className="font-semibold text-sm truncate">{u.name}</p>{u.role === 'ADMIN' && <Badge className="bg-purple-600 text-white text-[10px] px-1.5">Admin</Badge>}{u.role === 'COURT_ADMIN' && <Badge className="bg-orange-500 text-white text-[10px] px-1.5">{getCourtAdminLabel(u.adminCourtIds)}</Badge>}</div>{u.username && <p className="text-xs text-gray-400 font-mono">@{u.username}</p>}<p className="text-xs text-gray-500 truncate">{u.email}</p><div className="flex items-center gap-2 mt-0.5">{u.level && getLevelBadge(u.level)}<span className="text-xs text-gray-400">{u._count?.bookings || 0} reservas</span></div></div>
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center gap-1.5 flex-wrap"><p className="font-semibold text-sm truncate">{u.name}</p>{u.role === 'ADMIN' && <Badge className="bg-purple-600 text-white text-[10px] px-1.5">Admin</Badge>}{u.role === 'COURT_ADMIN' && <Badge className="bg-orange-500 text-white text-[10px] px-1.5 truncate max-w-[150px] md:max-w-none">{getCourtAdminLabel(u.adminCourtIds)}</Badge>}</div>
+                            {u.username && <p className="text-xs text-gray-400 font-mono">@{u.username}</p>}
+                            <div className="flex items-center gap-2 mt-0.5">{u.level && getLevelBadge(u.level)}<span className="text-xs text-gray-400">{u._count?.bookings || 0} reservas</span></div>
+                          </div>
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            <Button variant="outline" size="sm" className="h-8 px-2 sm:px-3" onClick={() => { setEditUserForm({ ...u, courtIds: u.adminCourtIds || [], password: undefined }); setEditUserOpen(true) }}><Edit className="w-3.5 h-3.5 sm:mr-1" /><span className="hidden sm:inline">Editar</span></Button>
+                            {u.id !== user?.id && <Button variant="destructive" size="sm" className="h-8 px-2" onClick={() => handleDeleteUser(u.id)}><Trash2 className="w-3.5 h-3.5" /></Button>}
+                          </div>
                         </div>
-                        <div className="flex items-center gap-1.5 shrink-0">
-                          <Button variant="outline" size="sm" onClick={() => { setEditUserForm({ ...u, courtIds: u.adminCourtIds || [], password: undefined }); setEditUserOpen(true) }}><Edit className="w-3.5 h-3.5 mr-1" />Editar</Button>
-                          {u.id !== user?.id && <Button variant="destructive" size="sm" onClick={() => handleDeleteUser(u.id)} className="px-2"><Trash2 className="w-3.5 h-3.5" /></Button>}
-                        </div>
-                      </div></CardContent></Card>
+                      </CardContent></Card>
                     ))}</div>
                   )}
                 </TabsContent>
@@ -1476,10 +1478,10 @@ export default function Home() {
                   </div>
                   {adminLoading ? <div className="space-y-3">{[1, 2, 3].map(i => <Skeleton key={i} className="h-[90px] rounded-xl" />)}</div> : (
                     <div className="space-y-3">{adminBookings.map(booking => (
-                      <Card key={booking.id} className="hover:shadow-sm transition-shadow"><CardContent className="p-4"><div className="flex items-center justify-between gap-3">
-                        <div className="flex items-center gap-3 min-w-0">
+                      <Card key={booking.id} className="hover:shadow-sm transition-shadow"><CardContent className="p-3 md:p-4"><div className="flex items-center justify-between gap-2 md:gap-3">
+                        <div className="flex items-center gap-2 md:gap-3 min-w-0">
                           <div className="h-9 w-9 rounded-full bg-emerald-600 flex items-center justify-center shrink-0"><span className="text-white text-xs font-bold">{booking.user.name.charAt(0)}</span></div>
-                          <div className="min-w-0"><p className="font-semibold text-sm">{booking.user.name}</p><p className="text-xs text-gray-500">{booking.court.name}</p><p className="text-xs text-gray-600">{formatDateShort(booking.date)} - {booking.startTime} as {booking.endTime}</p>{booking.notes && <p className="text-xs text-gray-400 mt-0.5 truncate">{booking.notes}</p>}</div>
+                          <div className="min-w-0"><p className="font-semibold text-sm">{booking.user.name}</p><p className="text-xs text-gray-500">{booking.court.name}</p><p className="text-xs text-gray-600">{formatDateShort(booking.date)} - {booking.startTime} as {booking.endTime}</p><div className="flex items-center gap-2 mt-0.5 sm:hidden">{getStatusBadge(booking.status)}<span className="text-xs font-bold text-emerald-600">{formatCurrency(booking.totalPrice)}</span></div></div>
                         </div>
                         <div className="flex items-center gap-2 shrink-0">
                           <div className="text-right hidden sm:block">{getStatusBadge(booking.status)}<p className="font-bold text-emerald-600 text-sm mt-1">{formatCurrency(booking.totalPrice)}</p></div>
