@@ -1006,10 +1006,10 @@ export default function Home() {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <div className="overflow-x-auto -mx-4 px-4">
             <TabsList className={`inline-flex w-full md:grid md:mx-auto ${isAdminRole ? 'md:max-w-3xl md:grid-cols-5' : 'md:max-w-2xl md:grid-cols-4'} h-auto p-1`}>
-              <TabsTrigger value="public" className="flex-1 text-xs md:text-sm whitespace-nowrap px-2 md:px-3 py-2"><Eye className="w-4 h-4 mr-1 md:mr-1.5 shrink-0" /><span className="hidden sm:inline">Reservas do Dia</span><span className="sm:hidden">Dia</span></TabsTrigger>
+              <TabsTrigger value="public" className="flex-1 text-xs md:text-sm whitespace-nowrap px-2 md:px-3 py-2"><Eye className="w-4 h-4 mr-1 md:mr-1.5 shrink-0" />Desafios</TabsTrigger>
               <TabsTrigger value="booking" className="flex-1 text-xs md:text-sm whitespace-nowrap px-2 md:px-3 py-2"><CalendarDays className="w-4 h-4 mr-1 md:mr-1.5 shrink-0" />Reservar</TabsTrigger>
               <TabsTrigger value="courts" className="flex-1 text-xs md:text-sm whitespace-nowrap px-2 md:px-3 py-2"><MapPin className="w-4 h-4 mr-1 md:mr-1.5 shrink-0" />Quadras</TabsTrigger>
-              {(!user || user.role === 'PLAYER') && <TabsTrigger value="bookings" className="flex-1 text-xs md:text-sm whitespace-nowrap px-2 md:px-3 py-2"><Users className="w-4 h-4 mr-1 md:mr-1.5 shrink-0" /><span className="hidden sm:inline">Minhas Reservas</span><span className="sm:hidden">Minhas</span></TabsTrigger>}
+              {(!user || user.role === 'PLAYER') && <TabsTrigger value="bookings" className="flex-1 text-xs md:text-sm whitespace-nowrap px-2 md:px-3 py-2"><Users className="w-4 h-4 mr-1 md:mr-1.5 shrink-0" />Reservas</TabsTrigger>}
               {isAdminRole && <TabsTrigger value="admin" className="flex-1 text-xs md:text-sm whitespace-nowrap px-2 md:px-3 py-2 data-[state=active]:bg-purple-100 data-[state=active]:text-purple-700"><Settings className="w-4 h-4 mr-1 md:mr-1.5 shrink-0" />Admin</TabsTrigger>}
             </TabsList>
           </div>
