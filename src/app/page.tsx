@@ -177,8 +177,8 @@ const getLevelBadge = (level: string | null) => {
   }
   const { bg, text, label } = config[level] || config.C
   return (
-    <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${bg} ${text}`}>
-      {level} - {label}
+    <span className={`px-1.5 sm:px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-bold ${bg} ${text} whitespace-nowrap shrink-0`}>
+      <span className="sm:hidden">{level}</span><span className="hidden sm:inline">{level} - {label}</span>
     </span>
   )
 }
@@ -1070,15 +1070,15 @@ export default function Home() {
                                 </div>
                                 <div className="flex items-center gap-2 mt-2">
                                   <div className="flex items-center gap-1.5 flex-1 min-w-0">
-                                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-emerald-600 flex items-center justify-center shrink-0"><span className="text-white text-xs font-bold">{playerA.user.name.charAt(0)}</span></div>
-                                    <div className="min-w-0"><p className="font-medium text-xs sm:text-sm truncate">{playerA.user.name}</p>{playerA.user.level && <div className="text-[10px] sm:text-xs">{getLevelBadge(playerA.user.level)}</div>}</div>
+                                    {playerA.user.level && getLevelBadge(playerA.user.level)}
+                                    <p className="font-medium text-xs sm:text-sm truncate">{playerA.user.name}</p>
                                   </div>
                                   {playerB ? (
                                     <>
-                                      <span className="text-sm font-bold text-gray-400">x</span>
-                                      <div className="flex items-center gap-1.5 flex-1 min-w-0">
-                                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-blue-600 flex items-center justify-center shrink-0"><span className="text-white text-xs font-bold">{playerB.user.name.charAt(0)}</span></div>
-                                        <div className="min-w-0"><p className="font-medium text-xs sm:text-sm truncate">{playerB.user.name}</p>{playerB.user.level && <div className="text-[10px] sm:text-xs">{getLevelBadge(playerB.user.level)}</div>}</div>
+                                      <span className="text-sm font-bold text-gray-400 shrink-0">x</span>
+                                      <div className="flex items-center gap-1.5 flex-1 min-w-0 justify-end">
+                                        {playerB.user.level && getLevelBadge(playerB.user.level)}
+                                        <p className="font-medium text-xs sm:text-sm truncate">{playerB.user.name}</p>
                                       </div>
                                     </>
                                   ) : (
@@ -1485,7 +1485,7 @@ export default function Home() {
                         </div>
                         <div className="flex items-center gap-2 shrink-0">
                           <div className="text-right hidden sm:block">{getStatusBadge(booking.status)}<p className="font-bold text-emerald-600 text-sm mt-1">{formatCurrency(booking.totalPrice)}</p></div>
-                          <div className="flex flex-col gap-1">
+                          <div className="flex gap-1">
                             <Button variant="outline" size="sm" className="h-7 px-2" onClick={() => { setEditBookingForm(booking); setEditBookingOpen(true) }}><Edit className="w-3.5 h-3.5" /></Button>
                             <Button variant="destructive" size="sm" className="h-7 px-2" onClick={() => handleDeleteBooking(booking.id)}><Trash2 className="w-3.5 h-3.5" /></Button>
                           </div>
@@ -1517,10 +1517,16 @@ export default function Home() {
                   </div>
                   {adminLoading ? <div className="grid md:grid-cols-2 gap-4">{[1, 2].map(i => <Skeleton key={i} className="h-[100px] rounded-xl" />)}</div> : (
                     <div className="grid md:grid-cols-2 gap-4">{adminCourts.map(court => (
-                      <Card key={court.id} className={`hover:shadow-sm transition-shadow ${court.isActive === false ? 'opacity-60' : ''}`}><CardContent className="p-4"><div className="flex items-start gap-3">
-                        <div className="w-16 h-14 bg-gray-100 rounded-lg overflow-hidden shrink-0"><img src={court.image || 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=200'} alt={court.name} className="w-full h-full object-cover" /></div>
+                      <Card key={court.id} className={`hover:shadow-sm transition-shadow ${court.isActive === false ? 'opacity-60' : ''}`}><CardContent className="p-3 sm:p-4"><div className="flex items-start gap-2 sm:gap-3">
+                        <div className="w-14 h-12 sm:w-16 sm:h-14 bg-gray-100 rounded-lg overflow-hidden shrink-0"><img src={court.image || 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=200'} alt={court.name} className="w-full h-full object-cover" /></div>
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2"><p className="font-semibold text-sm truncate">{court.name}</p>{court.isActive === false && <Badge variant="destructive" className="text-[10px]">Inativa</Badge>}</div>
+                          <div className="flex items-center justify-between gap-1">
+                            <div className="flex items-center gap-1.5 min-w-0"><p className="font-semibold text-sm truncate">{court.name}</p>{court.isActive === false && <Badge variant="destructive" className="text-[10px]">Inativa</Badge>}</div>
+                            <div className="flex gap-1 shrink-0">
+                              <Button variant="outline" size="sm" className="h-7 px-2" onClick={() => { setEditCourtForm(court); setEditCourtOpen(true) }}><Edit className="w-3.5 h-3.5" /></Button>
+                              {user?.role === 'ADMIN' && <Button variant="destructive" size="sm" className="h-7 px-2" onClick={() => handleDeleteCourt(court.id)}><Trash2 className="w-3.5 h-3.5" /></Button>}
+                            </div>
+                          </div>
                           <p className="text-xs text-gray-500">{getCourtTypeLabel(court.type)} - {getSurfaceLabel(court.surface)}</p>
                           {court.courtAdmins && court.courtAdmins.length > 0 ? (
                             <p className="text-xs text-indigo-600 mt-0.5 flex items-center gap-1"><Shield className="w-3 h-3" />{court.courtAdmins.map(a => a.name).join(', ')}</p>
@@ -1528,10 +1534,6 @@ export default function Home() {
                             <p className="text-xs text-gray-400 mt-0.5">Sem administrador</p>
                           )}
                           <div className="flex items-center gap-3 mt-1.5 text-xs"><span className="font-bold text-emerald-600">{formatCurrency(court.pricePerHour)}</span><span className="text-gray-400">{court.totalBookings} reservas</span><span className="text-gray-400">{formatCurrency(court.totalRevenue || 0)}</span></div>
-                        </div>
-                        <div className="flex gap-1 shrink-0">
-                          <Button variant="outline" size="sm" className="h-7 px-2" onClick={() => { setEditCourtForm(court); setEditCourtOpen(true) }}><Edit className="w-3.5 h-3.5" /></Button>
-                          {user?.role === 'ADMIN' && <Button variant="destructive" size="sm" className="h-7 px-2" onClick={() => handleDeleteCourt(court.id)}><Trash2 className="w-3.5 h-3.5" /></Button>}
                         </div>
                       </div></CardContent></Card>
                     ))}</div>
