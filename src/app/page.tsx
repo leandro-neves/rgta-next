@@ -1491,8 +1491,8 @@ export default function Home() {
                             <div className="flex items-center gap-2 mt-0.5">{u.level && getLevelBadge(u.level)}<span className="text-xs text-gray-400">{u._count?.bookings || 0} reservas</span></div>
                           </div>
                           <div className="flex items-center gap-1.5 shrink-0">
-                            <Button variant="outline" size="sm" className="h-8 px-2 sm:px-3" onClick={() => { setEditUserForm({ ...u, courtIds: u.adminCourtIds || [], password: undefined }); setEditUserOpen(true) }}><Edit className="w-3.5 h-3.5 sm:mr-1" /><span className="hidden sm:inline">Editar</span></Button>
-                            {u.id !== user?.id && <Button variant="destructive" size="sm" className="h-8 px-2" onClick={() => handleDeleteUser(u.id)}><Trash2 className="w-3.5 h-3.5" /></Button>}
+                            {(u.username !== 'admin' || u.id === user?.id) && <Button variant="outline" size="sm" className="h-8 px-2 sm:px-3" onClick={() => { setEditUserForm({ ...u, courtIds: u.adminCourtIds || [], password: undefined }); setEditUserOpen(true) }}><Edit className="w-3.5 h-3.5 sm:mr-1" /><span className="hidden sm:inline">Editar</span></Button>}
+                            {u.id !== user?.id && u.username !== 'admin' && <Button variant="destructive" size="sm" className="h-8 px-2" onClick={() => handleDeleteUser(u.id)}><Trash2 className="w-3.5 h-3.5" /></Button>}
                           </div>
                         </div>
                       </CardContent></Card>

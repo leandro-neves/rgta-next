@@ -162,6 +162,12 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'Acesso negado' }, { status: 403 })
     }
 
+    // Proteger @admin: só ele mesmo pode se editar
+    const targetUser = await db.user.findUnique({ where: { id: userId }, select: { username: true } })
+    if (targetUser?.username === 'admin' && adminId !== userId) {
+      return NextResponse.json({ error: 'O usuário @admin só pode ser editado por ele mesmo' }, { status: 403 })
+    }
+
     // COURT_ADMIN nao pode alterar roles
     if (admin.role === 'COURT_ADMIN' && role) {
       return NextResponse.json({ error: 'Você não tem permissão para alterar funções de usuários' }, { status: 403 })
@@ -271,6 +277,12 @@ export async function DELETE(request: NextRequest) {
     // Não permitir excluir a si mesmo
     if (adminId === userId) {
       return NextResponse.json({ error: 'Não é possível excluir sua própria conta' }, { status: 400 })
+    }
+
+    // Proteger @admin: ninguém pode excluí-lo exceto ele mesmo
+    const targetUser = await db.user.findUnique({ where: { id: userId }, select: { username: true } })
+    if (targetUser?.username === 'admin') {
+      return NextResponse.json({ error: 'O usuário @admin não pode ser excluído' }, { status: 403 })
     }
 
     // Excluir reservas do usuário primeiro
