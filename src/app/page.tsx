@@ -145,6 +145,35 @@ const getSurfaceLabel = (surface: string) => {
   return labels[surface] || surface
 }
 
+const courtSlideshow: Record<string, string[]> = {
+  'Tennis Center': ['/tennis-center.png', '/tclogo.png'],
+}
+
+function CourtImageSlideshow({ images, alt }: { images: string[]; alt: string }) {
+  const [activeIndex, setActiveIndex] = useState(0)
+  useEffect(() => {
+    if (images.length <= 1) return
+    const interval = setInterval(() => {
+      setActiveIndex(prev => (prev + 1) % images.length)
+    }, 4000)
+    return () => clearInterval(interval)
+  }, [images.length])
+  const isLogo = (src: string) => src.includes('logo')
+  return (
+    <>
+      {images.map((src, i) => (
+        isLogo(src) ? (
+          <div key={src} className={`absolute inset-0 z-10 bg-white flex items-center justify-center transition-opacity duration-1000 ${i === activeIndex ? 'opacity-100' : 'opacity-0'}`}>
+            <img src={src} alt={alt} className="w-1/2 h-1/2 object-contain" />
+          </div>
+        ) : (
+          <img key={src} src={src} alt={alt} className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${i === activeIndex ? 'opacity-100' : 'opacity-0'}`} />
+        )
+      ))}
+    </>
+  )
+}
+
 const courtExtraInfo: Record<string, { address: string; mapsUrl: string; instagram: string }> = {
   'Tennis Center': {
     address: 'Av. Brasil, 1130 - Sumaré, Caraguatatuba - SP',
@@ -1065,7 +1094,6 @@ export default function Home() {
                                       ? <Badge className="flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-[10px] sm:text-xs"><CheckCircle className="w-3 h-3" />Confirmado</Badge>
                                       : <Badge className="flex items-center gap-1 bg-amber-500 hover:bg-amber-600 text-white text-[10px] sm:text-xs"><AlertCircle className="w-3 h-3" /><span className="hidden sm:inline">Aguardando Adversario</span><span className="sm:hidden">1 vaga</span></Badge>
                                     }
-                                    <span className="text-xs sm:text-sm font-bold text-emerald-600">{formatCurrency(playerA.totalPrice)}</span>
                                   </div>
                                 </div>
                                 <div className="flex items-center gap-2 mt-2">
@@ -1081,9 +1109,7 @@ export default function Home() {
                                         <p className="font-medium text-xs sm:text-sm truncate">{playerB.user.name}</p>
                                       </div>
                                     </>
-                                  ) : (
-                                    <div className="flex-1 text-center"><span className="text-xs text-gray-400 italic">Aguardando adversario...</span></div>
-                                  )}
+                                  ) : null}
                                 </div>
                               </div>
                               )
@@ -1241,7 +1267,11 @@ export default function Home() {
                 {courts.filter(c => c.isActive !== false).map(court => (
                   <Card key={court.id} className="overflow-hidden group hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
                     <div className="aspect-video bg-gray-100 relative overflow-hidden">
-                      <img src={court.image || 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=400'} alt={court.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      {courtSlideshow[court.name] ? (
+                        <CourtImageSlideshow images={courtSlideshow[court.name]} alt={court.name} />
+                      ) : (
+                        <img src={court.image || 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=400'} alt={court.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                       <Badge className="absolute top-3 right-3 bg-emerald-600 shadow-lg">{formatCurrency(court.pricePerHour)}</Badge>
                     </div>
